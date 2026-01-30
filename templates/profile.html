@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <h2 class="mb-4">My Profile</h2>
+
+    <div class="card p-4">
+
+        <p><strong>Username:</strong> {{ user.username }}</p>
+    {% if current_user.role == "customer" %}
+        <p><strong>Total Orders:</strong> {{ total_orders }}</p>
+        <p><strong>Total Spent:</strong> ₹{{ total_spent }}</p>
+    {% else %}
+        <p><strong>Role: </strong>{{ current_user.role }}</p>
+        <p><strong>Restaurant ID: </strong> {{ current_user.restaurant_id }}</p>
+    {% endif %}
+        <p>
+            <strong>Last Order Date:</strong>
+            {% if last_order %}
+                {{ last_order.created_at.strftime('%d %b %Y, %I:%M %p') }}
+            {% else %}
+                No orders yet
+            {% endif %}
+        </p>
+
+        <hr>
+
+        <!-- OPTIONAL ACTIONS -->
+        {% if current_user.role == "customer" %}
+            <a href="/orders">My Orders</a>
+        {% elif current_user.role == "restaurant_admin" %}
+            <a href="/admin/orders">Restaurant Orders</a>
+        {% elif current_user.role == "super_admin" %}
+            <a href="/admin/orders">All Orders</a>
+        {% endif %}
+
+        <br>
+        <a href="/change-password" class="btn btn-secondary mt-2">
+    Change Password
+</a>
+<br>
+        <a href="/logout" class="btn btn-danger ms-2">Logout</a>
+
+    </div>
+</div>
+
+{% endblock %}

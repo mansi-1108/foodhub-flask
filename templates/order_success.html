@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card" style="text-align:center; max-width:500px; margin:auto;">
+
+    {% if payment_method == "cod" %}
+        <h2 style="color:green;">✅ Order Placed Successfully</h2>
+        <p>Your order has been placed with <b>Cash on Delivery</b>.</p>
+        <p>Please keep cash ready at the time of delivery.</p>
+
+    {% else %}
+        <h2 style="color:#e23744;">💳 Payment Successful</h2>
+        <p>Your online payment was processed successfully.</p>
+        <p>Your food is being prepared 🍽️</p>
+    {% endif %}
+
+    <hr>
+
+    <p><b>Order ID:</b> #{{ order.id }}</p>
+    <p><b>Total Paid:</b> ₹{{ order.total }}</p>
+    <p><b>Delivery Address:</b> {{ order.address }}</p>
+    <p><b>Phone:</b> {{ order.phone }}</p>
+
+
+    <a href="/orders" class="card" style="background:#e23744;color:white;">
+        View My Orders
+    </a>
+
+</div>
+
+{% endblock %}

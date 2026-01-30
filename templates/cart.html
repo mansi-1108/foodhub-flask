@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Your Cart</h2>
+
+{% if cart_items|length == 0 %}
+  <p>Your cart is empty.</p>
+{% else %}
+
+<div class="cart-container">
+
+  {% for item in cart_items
+ %}
+  <div class="cart-item">
+
+    <div class="cart-left">
+      <h4>{{ item.food.name }}</h4>
+      <p class="cart-price">₹ {{ item.food.price }} × {{ item.quantity }}</p>
+    </div>
+
+    <div class="cart-right">
+      <a href="/decrease/{{ item.id }}" class="cart-btn">−</a>
+      <span class="cart-qty">{{ item.quantity }}</span>
+      <a href="/increase/{{ item.id }}" class="cart-btn">+</a>
+
+      <a href="/remove/{{ item.id }}" class="cart-remove">Remove</a>
+    </div>
+
+  </div>
+  {% endfor %}
+
+  <div class="cart-summary">
+    <!-- Totals section -->
+    <p>Total: ₹ {{ total }}</p>
+
+    {% if discount and discount > 0 %}
+        <p>Discount: -₹ {{ discount }}</p>
+    {% endif %}
+
+    <h3>Final Amount: ₹ {{ final_total }}</h3>
+
+    <!-- Coupon form -->
+    <form method="post" action="{{ url_for('apply_coupon') }}">
+        <input type="text" name="coupon_code" placeholder="Enter coupon code" required>
+        <button type="submit">Apply</button>
+    </form>
+
+    {% if coupon_msg %}
+        <p style="color: green;">{{ coupon_msg }}</p>
+    {% endif %}
+    {% if coupon_error %}
+        <p style="color: red;">{{ coupon_error }}</p>
+    {% endif %}
+
+    <a href="/payment" class="pay-btn">Proceed to Payment</a>
+  </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

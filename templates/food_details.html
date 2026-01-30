@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="food-card">
+
+    <img src="{{ food.image }}" class="food-image">
+
+    <div class="food-info">
+        <h2>{{ food.name }}</h2>
+
+        <p class="price">₹ {{ food.price }}</p>
+
+        {% if avg_rating %}
+            <div class="rating">
+                ⭐ {{ avg_rating }} / 5
+            </div>
+        {% else %}
+            <div class="rating muted">No ratings yet</div>
+        {% endif %}
+    </div>
+
+</div>
+
+<hr>
+
+<h3>Customer Reviews</h3>
+
+{% if reviews|length == 0 %}
+<p>No reviews yet.</p>
+{% endif %}
+
+{% for review in reviews %}
+<div class="review-card">
+    <b>{{ review.user.username }}</b>
+    <span class="stars">⭐ {{ review.rating }}/5</span>
+    <p>{{ review.comment }}</p>
+</div>
+{% endfor %}
+
+{% endblock %}

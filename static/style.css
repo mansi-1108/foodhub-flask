@@ -1,0 +1,643 @@
+/* =============================== GLOBAL RESET ================================ */ 
+* {
+  box-sizing: border-box; 
+}
+body { 
+margin: 0; 
+font-family: "Segoe UI",
+sans-serif; 
+background: #f5f5f5; 
+} 
+
+/* =============================== NAVBAR ================================ */
+ .navbar {
+   background: #e23744; 
+   padding: 15px 30px; 
+   color: white; 
+   display: flex;
+   justify-content: space-between; 
+   align-items: center; top: 70px; 
+}
+.logo { 
+  font-size: 24px; 
+  font-weight: bold;
+ } 
+ .nav-links { 
+  display: flex; 
+  align-items: center; 
+  gap: 20px; 
+}
+ .nav-links a { 
+  color: white; 
+  text-decoration: none; 
+  font-weight: 500;
+ }
+  .logout {
+    background: white;
+    color: #e23744 !important;
+    padding: 8px 15px; 
+    border-radius: 5px; 
+  }
+  .logout:hover {
+    background: #f5f5f5; 
+    color: #c92d3a !important; 
+  }
+
+/* =============================== LAYOUT ================================ */
+ .container { 
+  padding: 30px;
+ }
+ 
+ /* =============================== GRID ================================ */
+  .grid {
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 25px; 
+  }
+  
+  /* =============================== GLOBAL FORMS ================================ */ 
+
+form { 
+  background: white; 
+  max-width: 400px;
+  margin: auto;
+  padding: 30px; 
+  border-radius: 10px;
+ }
+ 
+ input, select { 
+  width: 100%; 
+  padding: 12px; 
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc; 
+  font-size: 15px;
+ } 
+ 
+ button { 
+  width: 100%;
+  background: #e23744; 
+  color: white; 
+  padding: 12px; 
+  border: none; 
+  border-radius: 6px;
+  cursor: pointer;
+ }
+
+/* =============================== CART BADGE ================================ */
+ .cart-badge { 
+  background: white; 
+  color: #e23744;
+  padding: 2px 8px; 
+  border-radius: 50%;
+  font-size: 13px;
+  margin-left: 6px; 
+  font-weight: bold; 
+}
+
+/* =============================== ORDER STATUS ================================ */ 
+.status { 
+  padding: 4px 10px; 
+  border-radius: 6px; 
+  font-weight: bold; 
+}
+ .status.pending { 
+  background: orange;
+   color: white; 
+  }
+   .status.accepted {
+    background: blue;
+    color: white; 
+  }
+  .status.preparing { 
+    background: purple; 
+    color: white; 
+  } 
+  .status.out-for-delivery { 
+  background: teal;
+   color: white; 
+  }
+  .status.delivered { 
+  background: green;
+  color: white; 
+}
+ .status.cancelled { 
+  background: red;
+  color: white; 
+}
+
+/* =============================== 🔍 MENU SEARCH & FILTER BAR ================================ */
+ form.menu-filters { 
+  background: white; 
+  max-width: 100%;
+  padding: 16px 20px; 
+  border-radius: 14px; 
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08); 
+  margin-bottom: 30px; display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto; 
+  gap: 12px; align-items: center; 
+}
+ .menu-filters input, .menu-filters select, .menu-filters button { 
+  margin: 0;
+  width: 100%; 
+  height: 42px;
+  padding: 0 14px; 
+  border-radius: 8px; 
+  font-size: 15px; 
+}
+.menu-filters button { 
+  background: #e23744; 
+  color: white; 
+  font-weight: 600; 
+  cursor: pointer; 
+  white-space: nowrap; 
+}
+ .menu-filters button:hover { 
+  background: #c92d3a;
+ }
+ 
+/* =============================== ZOMATO STYLE FOOD CARD (MENU) ================================ */ 
+.food-card-zomato {
+  background: white; 
+  border-radius: 14px;
+   padding: 12px; 
+   position: relative; 
+   box-shadow: 0 6px 15px rgba(0,0,0,0.08); 
+  }
+  .food-img { 
+  width: 100%; 
+  height: 170px; 
+  object-fit: cover;
+  border-radius: 12px; 
+}
+ /* Bestseller Badge */ 
+
+.badge.bestseller {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #f4b400;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+ 
+ /* Veg / Nonveg Dot */
+  .veg-dot { 
+  position: absolute; 
+  top: 12px;
+  right: 12px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+ }
+.veg-dot.veg {
+  background: green;
+ }
+.veg-dot.nonveg {
+  background: red; 
+}
+
+/* Price */
+ .food-card-zomato .price {
+  font-weight: bold; 
+  margin: 8px 0;
+ }
+
+/* ADD BUTTON */
+ .add-btn { 
+  display: flex;
+  justify-content: flex-end;
+ }
+  .add-btn a {
+  background: #e23744; 
+  color: white;
+  padding: 6px 14px;
+  border-radius: 6px; 
+  text-decoration: none;
+  font-weight: bold; 
+}
+
+ /* =============================== ADMIN VEG / BESTSELLER FLAGS ================================ */ 
+ .admin-flags { 
+  display: flex; 
+  gap: 25px; 
+  align-items: center; 
+  margin: 15px 0; 
+}
+ .flag {
+  display: flex; 
+  align-items: center; 
+  gap: 8px;
+  font-weight: 500;
+  cursor: pointer; 
+}
+ .flag input {
+  display: none;
+ }
+  .dot { 
+  width: 14px;
+  height: 14px; 
+  border-radius: 50%;
+ }
+  .dot.veg {
+  background: green;
+ }
+  .flag input:checked + .dot {
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.15);
+}
+
+/* =============================== FOOD DETAIL PAGE (FIXED) ================================ */
+ .food-card { 
+  background: white;
+  border-radius: 12px; 
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  max-width: 420px; 
+  margin: 30px auto;
+ }
+  .food-image {
+  width: 100%; 
+  height: 260px;
+  object-fit: cover; 
+  border-radius: 12px 12px 0 0;
+ }
+  .food-info {
+  padding: 20px;
+ }
+  .food-info h2 {
+  margin-top: 0;
+ }
+ .rating {
+  margin-top: 6px;
+  font-weight: bold;
+  color: #e23744;
+}
+ .rating.muted {
+  color: gray;
+}
+/* =============================== REVIEWS ================================ */
+ .review-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px; 
+  margin-bottom: 12px; 
+  box-shadow: 0 0 8px rgba(0,0,0,0.08);
+ }
+  .stars { 
+  float: right;
+  color: #f4b400; 
+}
+
+/* =============================== STICKY CATEGORY BAR (ZOMATO STYLE) ================================ */
+
+/* ===============================
+   CATEGORY BAR (BELOW NAVBAR)
+================================ */
+.category-bar {
+  background: white;
+  padding: 10px 15px;
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  z-index: 100;
+  border-bottom: 1px solid #eee;
+}
+
+.category-bar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  transition: 0.2s;
+}
+
+.category-bar a:hover {
+  background: #f5f5f5;
+  color: #e23744;
+}
+
+/* ===============================
+   ZOMATO STYLE QUANTITY BUTTONS
+================================ */
+.qty-control {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.add-btn-ajax {
+  background: #e23744;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.qty-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e23744;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.qty-box button {
+  background: none;
+  border: none;
+  color: #e23744;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 28px;
+}
+
+.qty-box .qty {
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* ===============================
+   CART PAGE STYLING
+================================ */
+.cart-container {
+  max-width: 700px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cart-left h4 {
+  margin: 0;
+}
+
+.cart-price {
+  color: gray;
+  margin-top: 4px;
+}
+
+.cart-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cart-btn {
+  background: #e23744;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.cart-qty {
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-remove {
+  color: red;
+  text-decoration: none;
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.cart-summary {
+  margin-top: 25px;
+  text-align: right;
+}
+
+.pay-btn {
+  display: inline-block;
+  margin-top: 15px;
+  background: #e23744;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* ===============================
+   ORDER TRACKING TIMELINE
+================================ */
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 25px 0 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+/* center connecting line */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: #ddd;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+/* steps */
+.timeline li {
+  position: relative;
+  z-index: 1;
+  background: white;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  border: 2px solid #ddd;
+  min-width: 130px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* completed */
+.timeline li.done {
+  color: green;
+  border-color: green;
+  font-weight: bold;
+}
+
+/* pending */
+.timeline li.pending {
+  color: gray;
+  border-color: #ccc;
+}
+
+
+/* ===============================
+   MENU FILTER BAR (ONE LINE)
+================================ */
+.menu-filters {
+  display: grid;
+  grid-template-columns: 
+    2.2fr 
+    1fr 
+    1fr 
+    0.8fr 
+    0.8fr 
+    1fr 
+    auto;
+  gap: 12px;
+  align-items: center;
+  background: white;
+  padding: 16px 20px;
+  border-radius: 14px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+.menu-filters input,
+.menu-filters select,
+.menu-filters button {
+  height: 42px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin: 0;
+}
+
+.menu-filters input {
+  padding: 0 12px;
+}
+
+.menu-filters button {
+  background: #e23744;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.menu-filters button:hover {
+  background: #c92d3a;
+}
+
+/* ===============================
+   RECOMMENDATIONS
+================================ */
+.recommendation-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.recommendation-grid .food-card {
+  width: 280px;
+}
+
+.food-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   ORDERS PAGE FIXED UI
+================================ */
+
+.order-card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 30px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-total {
+  font-size: 20px;
+  font-weight: bold;
+  color: #e23744;
+}
+
+.muted {
+  color: gray;
+  font-size: 14px;
+}
+
+/* Status */
+.status-text {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.live-status.pending { color: orange; }
+.live-status.accepted { color: blue; }
+.live-status.preparing { color: purple; }
+.live-status.out\ for\ delivery { color: teal; }
+.live-status.delivered { color: green; }
+
+/* Status message */
+.status-message {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Timeline fix */
+.timeline {
+  margin-top: 20px;
+}
+
+/* Order items */
+.order-items {
+  border-top: 1px solid #eee;
+  margin-top: 20px;
+  padding-top: 15px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.category-bar a.active {
+  background: #e23744;
+  color: white;
+}
+
+.success-msg {
+  background: #e6fff0;
+  color: #1a7f37;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-weight: 600;
+}

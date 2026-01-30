@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Manage Orders</h2>
+
+{% for entry in data %}
+<div class="card">
+    <h3>Order #{{ entry.order.id }}</h3>
+
+    <p><strong>User:</strong> {{ entry.user.username }}</p>
+    <p><strong>Total:</strong> ₹{{ entry.order.total }}</p>
+    <p><strong>Payment:</strong> {{ entry.order.payment_method|upper }}</p>
+    <p><strong>Address:</strong> {{ entry.order.address }}</p>
+    <p><strong>Phone:</strong> {{ entry.order.phone }}</p>
+
+
+    <p>
+        <strong>Status:</strong>
+        <span class="status {{ entry.order.status|lower }}">
+            {{ entry.order.status }}
+        </span>
+    </p>
+
+    <hr>
+
+    <h4>Items</h4>
+    {% for item in entry["items"] %}
+        <p>{{ item.food_name }} × {{ item.quantity }} = ₹{{ item.price * item.quantity }}</p>
+    {% endfor %}
+
+    <hr>
+
+    <!-- Update Status -->
+    <form method="POST" action="/admin/update-order-status/{{ entry.order.id }}">
+        <select name="status">
+            <option value="Pending" {% if entry.order.status == 'Pending' %}selected{% endif %}>Pending</option>
+            <option value="Accepted" {% if entry.order.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+            <option value="Preparing" {% if entry.order.status == 'Preparing' %}selected{% endif %}>Preparing</option>
+            <option value="Out for Delivery" {% if entry.order.status == 'Out for Delivery' %}selected{% endif %}>Out for Delivery</option>
+            <option value="Delivered" {% if entry.order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+            <option value="Cancelled" {% if entry.order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">
+            Update Status
+        </button>
+    </form>
+
+    <!-- Cancel Order -->
+    {% if entry.order.status not in ['Delivered', 'Cancelled'] %}
+    <form method="POST" action="/admin/cancel-order/{{ entry.order.id }}">
+        <button class="btn btn-danger mt-2">
+            Cancel Order
+        </button>
+    </form>
+    {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}

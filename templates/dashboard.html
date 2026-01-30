@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Admin Dashboard</h2>
+
+<div class="grid">
+  <div class="card">
+    <h3>Total Users</h3>
+    <p>{{ total_users }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Total Orders</h3>
+    <p>{{ total_orders }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Total Revenue</h3>
+    <p>₹ {{ total_revenue }}</p>
+  </div>
+</div>
+
+<h3 style="margin-top:30px;">Top Selling Items</h3>
+{% for food in top_foods %}
+  <p>{{ food.food_name }} — {{ food.total_qty }} sold</p>
+{% endfor %}
+
+<h3 style="margin-top:30px;">Recent Orders</h3>
+{% for order in recent_orders %}
+  <div class="card">
+    Order #{{ order.id }} – ₹{{ order.total }}
+  </div>
+{% endfor %}
+
+{% endblock %}

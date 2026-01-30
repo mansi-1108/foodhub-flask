@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2>Explore Menu</h2>
+
+<!-- 🔍 SEARCH • 🍽️ FILTER • 💰 SORT -->
+<form method="GET" action="{{ url_for('menu') }}" class="menu-filters">
+
+    <!-- Search -->
+    <input type="text" name="search"
+           placeholder="Search dishes or cuisine..."
+           value="{{ request.args.get('search','') }}">
+
+    <!-- Veg / Non-Veg -->
+    <select name="type">
+        <option value="">All</option>
+        <option value="veg" {% if request.args.get('type') == 'veg' %}selected{% endif %}>Veg</option>
+        <option value="nonveg" {% if request.args.get('type') == 'nonveg' %}selected{% endif %}>Non-Veg</option>
+    </select>
+
+    <!-- Cuisine -->
+   <select name="cuisine">
+  <option value="">All Cuisines</option>
+  {% for c in all_cuisines %}
+    <option value="{{ c }}"
+      {% if selected_cuisine == c %}selected{% endif %}>
+      {{ c }}
+    </option>
+  {% endfor %}
+</select>
+
+    <!-- Price Range -->
+    <input type="number" name="min_price" placeholder="Min ₹"
+           value="{{ request.args.get('min_price','') }}">
+    <input type="number" name="max_price" placeholder="Max ₹"
+           value="{{ request.args.get('max_price','') }}">
+
+    <!-- Sort -->
+    <select name="sort">
+        <option value="">Sort</option>
+        <option value="low" {% if request.args.get('sort') == 'low' %}selected{% endif %}>Price ↑</option>
+        <option value="high" {% if request.args.get('sort') == 'high' %}selected{% endif %}>Price ↓</option>
+    </select>
+
+    <button type="submit">Apply</button>
+</form>
+
+<!-- ⭐ RECOMMENDATIONS -->
+{% if recommendations %}
+<h2 class="section-title">Recommended for You ❤️</h2>
+
+<div class="recommendation-grid">
+  {% for food in recommendations %}
+    <div class="food-card">
+
+      {% if food.image.startswith('http') %}
+        <img src="{{ food.image }}" alt="{{ food.name }}">
+      {% else %}
+        <img src="{{ url_for('static', filename='Images/' + food.image) }}" alt="{{ food.name }}">
+      {% endif %}
+
+      <h4>{{ food.name }}</h4>
+      <p class="price">₹{{ food.price }}</p>
+
+      <!-- ✅ AJAX ONLY (NO FORM) -->
+      <button class="add-btn-ajax"
+              onclick="addToCart({{ food.id }}, this)">
+          ADD
+      </button>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- 🍽️ CATEGORY BAR -->
+<div class="category-bar">
+  {% for c in all_cuisines %}
+    <a href="/menu?cuisine={{ c }}"
+       class="{% if selected_cuisine == c %}active{% endif %}">
+       {{ c }}
+    </a>
+  {% endfor %}
+</div>
+
+<!-- 🍔 FOOD LIST -->
+{% for restaurant, foods in restaurants.items() %}
+
+<h2 id="{{ restaurant.name }}" style="margin-top:40px;">
+  {{ restaurant.name }}
+  <span style="color:gray; font-size:14px;">
+    ⭐ {{ restaurant.rating }} • {{ restaurant.delivery_time }}
+  </span>
+</h2>
+
+<div class="grid">
+    {% for food in foods %}
+    <div class="food-card-zomato">
+
+        {% if food.image.startswith('http') %}
+          <img src="{{ food.image }}" class="food-img">
+        {% else %}
+          <img src="{{ url_for('static', filename='Images/' + food.image) }}" class="food-img">
+        {% endif %}
+
+        {% if food.is_bestseller %}
+          <span class="badge bestseller">⭐ Bestseller</span>
+        {% endif %}
+
+        <span class="veg-dot {{ 'veg' if food.is_veg else 'nonveg' }}"></span>
+        
+        <h4>{{ food.name | highlight(search) | safe }}</h4>
+        <p>{{ food.cuisine | highlight(search) | safe }}</p> 
+        <p class="price">₹ {{ food.price }}</p>
+
+       {% if food.avg_rating %}
+          <p class="rating">
+              ⭐ {{ food.avg_rating }} / 5
+              <span style="color:gray; font-size:13px;">
+                  ({{ food.reviews_count if food.reviews_count else 0 }} reviews)
+              </span>
+              </p>
+       {% else %}
+              <p class="rating muted">No ratings yet</p>
+       {% endif %}
+              
+        <button class="add-btn-ajax"
+                onclick="addToCart({{ food.id }}, this)">
+            ADD
+        </button>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endfor %}
+
+<!-- ✅ AJAX SCRIPT -->
+<script>
+function addToCart(foodId, btn) {
+    fetch(`/api/cart/add/${foodId}`, {
+        method: "POST",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            btn.innerText = "ADDED ✓";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerText = "ADD";
+                btn.disabled = false;
+            }, 1200);
+        }
+    });
+}
+</script>
+
+{% endblock %}

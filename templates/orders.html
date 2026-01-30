@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="orders-page">
+  <h2>Your Orders</h2>
+
+  {% if data|length == 0 %}
+    <p>No orders placed yet.</p>
+  {% endif %}
+
+  {% for entry in data %}
+  <div class="order-card">
+
+    <!-- HEADER -->
+    <div class="order-header">
+      <h3>Order #{{ entry.order.id }}</h3>
+      <div class="order-total">₹{{ entry.order.total }}</div>
+    </div>
+
+    <p class="muted">
+      Payment: {{ entry.order.payment_method|upper }}
+    </p>
+
+    <!-- LIVE STATUS -->
+    <p class="status-text">
+      Status:
+      <span class="live-status" data-order-id="{{ entry.order.id }}">
+        {{ entry.order.status }}
+      </span>
+    </p>
+
+    <p class="success-msg" id="msg-{{ entry.order.id }}"></p>
+
+    <!-- TIMELINE -->
+    <ul class="timeline" data-order-id="{{ entry.order.id }}">
+      {% set steps = ["Pending","Accepted","Preparing","Out for Delivery","Delivered"] %}
+
+      {% if entry.order.status == "Cancelled" %}
+        {% for step in steps %}
+          <li class="pending">{{ step }}</li>
+        {% endfor %}
+        <li class="done cancelled">Cancelled</li>
+      {% else %}
+        {% for step in steps %}
+          <li class="{% if steps.index(step) <= steps.index(entry.order.status) %}done{% else %}pending{% endif %}">
+            {{ step }}
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+
+    <!-- STATUS HISTORY -->
+    <div class="status-history">
+      <h4>Status History</h4>
+      <ul>
+        {% for h in entry.history %}
+          <li>
+            {{ h.status }}
+            <span>{{ h.changed_at.strftime('%d %b %Y, %I:%M %p') }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- ORDER ITEMS -->
+    <div class="order-items">
+      {% for item in entry["items"] %}
+        <div class="order-item">
+          <span>{{ item.food_name }} × {{ item.quantity }}</span>
+          <span>₹{{ item.price * item.quantity }}</span>
+        </div>
+
+        <!-- REVIEW SECTION -->
+        {% if entry.order.status == "Delivered" %}
+
+          {% if item.reviewed %}
+            <!-- ✅ REVIEW SUBMITTED -->
+            <div class="success-msg">
+              ✅ Review submitted (⭐ {{ review_map[item.food_id] }}/5)
+            </div>
+
+          {% else %}
+            <!-- 📝 REVIEW FORM -->
+            <form method="POST" action="/review/{{ item.food_id }}">
+              <select name="rating" required>
+                <option value="">Rate</option>
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="1">⭐</option>
+              </select>
+
+              <input type="text" name="comment" placeholder="Write a review" required>
+              <button type="submit">Submit Review</button>
+            </form>
+          {% endif %}
+
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- CANCEL BUTTON -->
+    {% if entry.order.status in ["Pending","Accepted"] %}
+      <form method="POST" action="/cancel-order/{{ entry.order.id }}" style="margin-top:15px;">
+        <button style="background:#ff4d4d;">Cancel Order</button>
+      </form>
+    {% endif %}
+
+  </div>
+  {% endfor %}
+</div>
+
+<!-- LIVE STATUS SCRIPT -->
+<script>
+function statusMessage(status) {
+  if (status === "Pending") return "Your order is placed 📝";
+  if (status === "Accepted") return "Restaurant accepted your order ✅";
+  if (status === "Preparing") return "Your food is being prepared 🍳";
+  if (status === "Out for Delivery") return "Your food is on the way 🚴‍♂️";
+  if (status === "Delivered") return "Order delivered. Enjoy 😋";
+  if (status === "Cancelled") return "Order was cancelled ❌";
+  return status;
+}
+
+function updateTimeline(ul, status) {
+  if (status === "Cancelled") return;
+
+  const steps = ["Pending","Accepted","Preparing","Out for Delivery","Delivered"];
+  const liList = ul.querySelectorAll("li");
+
+  liList.forEach((li, i) => {
+    if (steps.indexOf(status) >= i) {
+      li.className = "done";
+    } else {
+      li.className = "pending";
+    }
+  });
+}
+
+function pollOrderStatus() {
+  document.querySelectorAll(".live-status").forEach(span => {
+    const orderId = span.dataset.orderId;
+
+    fetch(`/api/order-status/${orderId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) return;
+
+        span.innerText = data.status;
+
+        const msg = document.getElementById(`msg-${orderId}`);
+        if (msg) msg.innerText = statusMessage(data.status);
+
+        const timeline = document.querySelector(
+          `.timeline[data-order-id="${orderId}"]`
+        );
+        if (timeline) updateTimeline(timeline, data.status);
+      });
+  });
+}
+
+setInterval(pollOrderStatus, 5000);
+pollOrderStatus();
+</script>
+
+{% endblock %}
