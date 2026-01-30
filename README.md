@@ -21,3 +21,44 @@ Full-stack online food ordering system built with Flask, SQLAlchemy, and JavaScr
 ```bash
 pip install -r requirements.txt
 python app.py
+
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+### Register Page
+![Register Page](screenshots/register.png)
+
+### Menu Page
+![Menu Page](screenshots/menu.png)
+
+### Cart Page
+![Cart Page](screenshots/cart.png)
+
+### Order Page
+![Order Page](screenshots/order.png)
+
+### Order Details
+![Order Details](screenshots/order_info.png)
+
+### Payment Page
+![Payment Page](screenshots/payment.png)
+
+### Online Payment
+![Online Payment](screenshots/online_payment.png)
+
+### User Profile
+![User Profile](screenshots/profile.png)
+
+### Change Password
+![Change Password](screenshots/change_pass.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/dashboard.png)
+
+### Admin Panel
+![Admin Panel](screenshots/admin.png)
