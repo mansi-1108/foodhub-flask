@@ -42,6 +42,9 @@ class Order(db.Model):
     
     payment_method = db.Column(db.String(20))
     status = db.Column(db.String(20), default="Pending")
+    payment_status = db.Column(db.String(20), default="Paid")
+    refund_status = db.Column(db.String(20), default="Not Applicable")
+    
     created_at = db.Column(db.DateTime, default=db.func.now())
 
     address = db.Column(db.Text)

@@ -569,7 +569,6 @@ def update_order_status(order_id):
     flash("Order status updated", "success")
     return redirect('/admin/orders')
 
-
 @app.route('/admin/cancel-order/<int:order_id>', methods=['POST'])
 @login_required
 @admin_required
@@ -585,6 +584,7 @@ def cancel_order(order_id):
         db.session.commit()
     flash("Order cancelled", "success")
     return redirect('/admin/orders')
+
 
 @app.route('/profile')
 @login_required
@@ -760,22 +760,29 @@ def user_cancel_order(order_id):
     order = Order.query.get_or_404(order_id)
 
     if order.user_id != current_user.id:
+        abort(403)
+
+    if order.status not in ['Pending', 'Accepted']:
+        flash("Order cannot be cancelled now.", "danger")
         return redirect('/orders')
 
-    if order.status in ['Pending', 'Accepted']:
-        order.status = 'Cancelled'
+    order.status = 'Cancelled'
 
-        history = OrderStatusHistory(
-            order_id=order.id,
-            status='Cancelled'
-        )
-        db.session.add(history)
+    # ✅ REFUND LOGIC (THIS WAS MISSING)
+    if order.payment_method.lower() == "online":
+        order.payment_status = "Refunded"
+        order.refund_status = "Refund Initiated (Mock)"
 
-        db.session.commit()
+    history = OrderStatusHistory(
+        order_id=order.id,
+        status='Cancelled'
+    )
+    db.session.add(history)
+    db.session.commit()
 
-        flash("Order cancelled", "success")
-
+    flash("Order cancelled successfully.", "success")
     return redirect('/orders')
+
 
 @app.route('/create-default-restaurant')
 def create_default_restaurant():

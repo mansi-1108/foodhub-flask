@@ -62,3 +62,10 @@ python app.py
 
 ### Admin Panel
 ![Admin Panel](screenshots/admin.png)
+
+### Order Cancellation & Refund Logic
+- Orders can be cancelled only before food preparation begins
+- Cancellation automatically updates order status
+- Mock refund is initiated for online payments
+- COD orders do not trigger refunds
+- Complete status history is stored for audit tracking
