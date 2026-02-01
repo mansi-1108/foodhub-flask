@@ -146,6 +146,7 @@ function addToCart(foodId, btn) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
+            // Button feedback
             btn.innerText = "ADDED ✓";
             btn.disabled = true;
 
@@ -153,6 +154,15 @@ function addToCart(foodId, btn) {
                 btn.innerText = "ADD";
                 btn.disabled = false;
             }, 1200);
+
+            // 🔥 UPDATE CART BADGE
+            const badge = document.getElementById("cart-count");
+
+            let current = parseInt(badge.innerText) || 0;
+            badge.innerText = current + 1;
+
+            // Show badge if hidden
+            badge.style.display = "inline-block";
         }
     });
 }

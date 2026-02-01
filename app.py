@@ -904,7 +904,6 @@ def highlight(text, word):
         word,
         f"<mark>{word}</mark>"
     )
-
 # ---------------- RUN ---------------- #
 
 if __name__ == '__main__':
