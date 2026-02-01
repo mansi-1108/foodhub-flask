@@ -69,3 +69,11 @@ python app.py
 - Mock refund is initiated for online payments
 - COD orders do not trigger refunds
 - Complete status history is stored for audit tracking
+
+### 🚀 Features
+- Real-time cart count update using AJAX (no page reload)
+- Dynamic menu filtering and sorting
+- Cart quantity management
+- Order tracking system
+
+
