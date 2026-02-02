@@ -1,11 +1,13 @@
-from flask import Flask, render_template, redirect, request,flash,abort,jsonify,url_for
+from flask import Flask, render_template, redirect, request,flash,abort,jsonify,url_for,send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import (login_user, login_required, logout_user,current_user)
 from sqlalchemy import func,or_
-import os
+import os,io
 from extensions import db, login_manager
 from models import User, Food, Cart, Order, OrderItem,Restaurant,OrderStatusHistory,Review
 from decorators import admin_required
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 
 # ---------------- APP CONFIG ---------------- #
 
@@ -904,6 +906,95 @@ def highlight(text, word):
         word,
         f"<mark>{word}</mark>"
     )
+
+@app.route("/invoice/<int:order_id>")
+@login_required
+def generate_invoice(order_id):
+    order = Order.query.get_or_404(order_id)
+
+    # Security: customer can download only their own invoice
+    if order.user_id != current_user.id and current_user.role == "Customer":
+        abort(403)
+
+    # ✅ FIX: fetch items manually
+    order_items = OrderItem.query.filter_by(order_id=order.id).all()
+
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+    y = height - 50
+
+    # Title
+    pdf.setFont("Helvetica-Bold", 18)
+    pdf.drawString(180, y, "FoodHub Invoice")
+    y -= 40
+
+    # Order info
+    pdf.setFont("Helvetica", 12)
+    pdf.drawString(50, y, f"Order ID: {order.id}")
+    y -= 20
+    pdf.drawString(50, y, f"Payment Method: {order.payment_method.upper()}")
+    y -= 20
+    pdf.drawString(50, y, f"Delivery Address: {order.address}")
+    y -= 30
+
+    # Table header
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(50, y, "Item")
+    pdf.drawString(260, y, "Qty")
+    pdf.drawString(310, y, "Price")
+    pdf.drawString(390, y, "Total")
+    y -= 20
+
+    pdf.setFont("Helvetica", 11)
+
+    subtotal = 0
+
+    for item in order_items:
+        item_total = item.price * item.quantity
+        subtotal += item_total
+
+        pdf.drawString(50, y, item.food_name)
+        pdf.drawString(260, y, str(item.quantity))
+        pdf.drawString(310, y, f"₹{item.price}")
+        pdf.drawString(390, y, f"₹{item_total}")
+        y -= 20
+
+        if y < 100:
+            pdf.showPage()
+            y = height - 50
+
+    # Charges
+    gst = round(subtotal * 0.05, 2)
+    delivery_charge = 40 if subtotal < 500 else 0
+    final_amount = subtotal + gst + delivery_charge
+
+    y -= 20
+    pdf.setFont("Helvetica-Bold", 12)
+    pdf.drawString(300, y, "Subtotal:")
+    pdf.drawString(390, y, f"₹{subtotal}")
+    y -= 20
+    pdf.drawString(300, y, "GST (5%):")
+    pdf.drawString(390, y, f"₹{gst}")
+    y -= 20
+    pdf.drawString(300, y, "Delivery:")
+    pdf.drawString(390, y, f"₹{delivery_charge}")
+    y -= 20
+    pdf.drawString(300, y, "Final Amount:")
+    pdf.drawString(390, y, f"₹{final_amount}")
+
+    pdf.showPage()
+    pdf.save()
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name=f"FoodHub_Invoice_Order_{order.id}.pdf",
+        mimetype="application/pdf"
+    )
+
+
 # ---------------- RUN ---------------- #
 
 if __name__ == '__main__':

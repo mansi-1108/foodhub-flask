@@ -7,7 +7,6 @@
         <h2 style="color:green;">✅ Order Placed Successfully</h2>
         <p>Your order has been placed with <b>Cash on Delivery</b>.</p>
         <p>Please keep cash ready at the time of delivery.</p>
-
     {% else %}
         <h2 style="color:#e23744;">💳 Payment Successful</h2>
         <p>Your online payment was processed successfully.</p>
@@ -21,11 +20,16 @@
     <p><b>Delivery Address:</b> {{ order.address }}</p>
     <p><b>Phone:</b> {{ order.phone }}</p>
 
+    <hr>
 
-    <a href="/orders" class="card" style="background:#e23744;color:white;">
-        View My Orders
+    <!-- DOWNLOAD INVOICE -->
+  <div class="action-buttons">
+    <a href="/invoice/{{ order.id }}" class="btn btn-invoice">
+        📄 Download Invoice (PDF)
     </a>
 
+    <a href="/orders" class="btn btn-orders">
+        View My Orders
+    </a>
 </div>
-
 {% endblock %}

@@ -14,7 +14,23 @@
     <!-- HEADER -->
     <div class="order-header">
       <h3>Order #{{ entry.order.id }}</h3>
-      <div class="order-total">₹{{ entry.order.total }}</div>
+
+      <div>
+        <span class="order-total">₹{{ entry.order.total }}</span>
+
+        {% if entry.order.status != "Cancelled" %}
+        <a href="{{ url_for('generate_invoice', order_id=entry.order.id) }}"
+           style="margin-left:10px;
+                  padding:4px 8px;
+                  background:#28a745;
+                  color:white;
+                  border-radius:4px;
+                  font-size:12px;
+                  text-decoration:none;">
+           Invoice
+        </a>
+        {% endif %}
+      </div>
     </div>
 
     <p class="muted">
@@ -69,34 +85,6 @@
           <span>{{ item.food_name }} × {{ item.quantity }}</span>
           <span>₹{{ item.price * item.quantity }}</span>
         </div>
-
-        <!-- REVIEW SECTION -->
-        {% if entry.order.status == "Delivered" %}
-
-          {% if item.reviewed %}
-            <!-- ✅ REVIEW SUBMITTED -->
-            <div class="success-msg">
-              ✅ Review submitted (⭐ {{ review_map[item.food_id] }}/5)
-            </div>
-
-          {% else %}
-            <!-- 📝 REVIEW FORM -->
-            <form method="POST" action="/review/{{ item.food_id }}">
-              <select name="rating" required>
-                <option value="">Rate</option>
-                <option value="5">⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
-              </select>
-
-              <input type="text" name="comment" placeholder="Write a review" required>
-              <button type="submit">Submit Review</button>
-            </form>
-          {% endif %}
-
-        {% endif %}
       {% endfor %}
     </div>
 
@@ -111,33 +99,7 @@
   {% endfor %}
 </div>
 
-<!-- LIVE STATUS SCRIPT -->
 <script>
-function statusMessage(status) {
-  if (status === "Pending") return "Your order is placed 📝";
-  if (status === "Accepted") return "Restaurant accepted your order ✅";
-  if (status === "Preparing") return "Your food is being prepared 🍳";
-  if (status === "Out for Delivery") return "Your food is on the way 🚴‍♂️";
-  if (status === "Delivered") return "Order delivered. Enjoy 😋";
-  if (status === "Cancelled") return "Order was cancelled ❌";
-  return status;
-}
-
-function updateTimeline(ul, status) {
-  if (status === "Cancelled") return;
-
-  const steps = ["Pending","Accepted","Preparing","Out for Delivery","Delivered"];
-  const liList = ul.querySelectorAll("li");
-
-  liList.forEach((li, i) => {
-    if (steps.indexOf(status) >= i) {
-      li.className = "done";
-    } else {
-      li.className = "pending";
-    }
-  });
-}
-
 function pollOrderStatus() {
   document.querySelectorAll(".live-status").forEach(span => {
     const orderId = span.dataset.orderId;
@@ -146,16 +108,7 @@ function pollOrderStatus() {
       .then(res => res.json())
       .then(data => {
         if (!data.success) return;
-
         span.innerText = data.status;
-
-        const msg = document.getElementById(`msg-${orderId}`);
-        if (msg) msg.innerText = statusMessage(data.status);
-
-        const timeline = document.querySelector(
-          `.timeline[data-order-id="${orderId}"]`
-        );
-        if (timeline) updateTimeline(timeline, data.status);
       });
   });
 }

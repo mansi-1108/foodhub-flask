@@ -1,79 +1,109 @@
-# FoodHub 🍔🍕
+# 🍔 FoodHub – Online Food Ordering System
 
-Full-stack online food ordering system built with Flask, SQLAlchemy, and JavaScript.
+FoodHub is a full-stack online food ordering web application built using Flask, SQLAlchemy, and JavaScript.
+It provides a real-world food delivery experience with cart management, live order tracking, admin controls, and invoice generation.
 
-## Features
-- User authentication with role-based access (Customer, Restaurant Admin, Super Admin)
+## 🚀 Key Features
+
+- User authentication (Customer, Restaurant Admin, Super Admin)
 - Restaurant-wise menu browsing with filters
-- Cart management and checkout
-- Coupon and discount system
+- Add to cart and quantity management
+- 🔄 Real-time cart count update using AJAX (no page reload)
+- Secure checkout with Cash on Delivery and Online Payment
+- 🧾 Downloadable order invoice (PDF)
 - Live order tracking with status timeline
-- Admin dashboard for orders and revenue
-- Reviews and ratings system
+- Order cancellation with refund logic
+- Reviews and ratings after delivery
 
-## Tech Stack
+## 🧾 Order Invoice (PDF)
+
+After successful order placement, users can download a detailed invoice.
+
+Invoice includes:
+- Order ID
+- Customer details
+- Ordered items with quantity and price
+- GST calculation
+- Delivery charges
+- Final payable amount
+
+Tech Used:
+- Python ReportLab for PDF generation
+- Secure access (only order owner can download)
+
+## 🔄 Real-Time Cart Update
+
+- Cart item count updates instantly using AJAX
+- No page reload required
+- Improves user experience and performance
+
+## 🛠️ Admin Features
+
+- Admin dashboard for orders and revenue
+- Manage menus and food items
+- Update order status (Accepted → Preparing → Delivered)
+- View complete order history
+- Status timeline and audit tracking
+
+## 🛠️ Tech Stack
+
 - Backend: Flask, SQLAlchemy
-- Frontend: HTML, CSS, JavaScript
+- Frontend: HTML, CSS, JavaScript (AJAX)
 - Database: SQLite
 - Authentication: Flask-Login
+- PDF Generation: ReportLab
 
-## How to Run Locally
-```bash
+## ▶️ How to Run Locally
+
+Clone the repository  
+git clone https://github.com/mansi-1108/foodhub-flask.git
+
+Navigate to project folder  
+cd foodhub-flask
+
+Create virtual environment  
+python -m venv venv  
+venv\Scripts\activate   (Windows)
+
+Install dependencies  
 pip install -r requirements.txt
+
+Run the application  
 python app.py
 
-## Screenshots
+App will run at:  
+http://127.0.0.1:5000
 
-### Home Page
-![Home Page](screenshots/home.png)
+## 📸 Screenshots
 
-### Login Page
-![Login Page](screenshots/login.png)
+Home Page  
+screenshots/home.png
 
-### Register Page
-![Register Page](screenshots/register.png)
+Login Page  
+screenshots/login.png
 
-### Menu Page
-![Menu Page](screenshots/menu.png)
+Register Page  
+screenshots/register.png
 
-### Cart Page
-![Cart Page](screenshots/cart.png)
+Menu Page  
+screenshots/menu.png
 
-### Order Page
-![Order Page](screenshots/order.png)
+Cart Page  
+screenshots/cart.png
 
-### Order Details
-![Order Details](screenshots/order_info.png)
+Order Page  
+screenshots/order.png
 
-### Payment Page
-![Payment Page](screenshots/payment.png)
+Invoice Download  
+screenshots/invoice.png
 
-### Online Payment
-![Online Payment](screenshots/online_payment.png)
+Admin Dashboard  
+screenshots/dashboard.png
 
-### User Profile
-![User Profile](screenshots/profile.png)
+## ❌ Order Cancellation & Refund Logic
 
-### Change Password
-![Change Password](screenshots/change_pass.png)
-
-### Admin Dashboard
-![Admin Dashboard](screenshots/dashboard.png)
-
-### Admin Panel
-![Admin Panel](screenshots/admin.png)
-
-### Order Cancellation & Refund Logic
-- Orders can be cancelled only before food preparation begins
+- Orders can be cancelled only before food preparation
 - Cancellation automatically updates order status
-- Mock refund is initiated for online payments
+- Mock refund initiated for online payments
 - COD orders do not trigger refunds
-- Complete status history is stored for audit tracking
-
-### 🚀 Features
-- Real-time cart count update using AJAX (no page reload)
-- Dynamic menu filtering and sorting
-- Cart quantity management
-- Order tracking system
-
-
+- Complete status history stored for tracking
